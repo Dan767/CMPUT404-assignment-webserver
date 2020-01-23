@@ -26,8 +26,10 @@ import socketserver
 
 # try: curl -v -X GET http://127.0.0.1:8080/
 
-#valid_host = []
-#redirect_host = []
+
+redirect_lookups = [b'127.0.0.1:8080/deep',b'127.0.0.1:8080']
+loc_lookups = ['127.0.0.1:8080/','127.0.0.1:8080/deep/']
+file_lookups = ['127.0.0.1:8080/index.html','127.0.0.1:8080/base.css','127.0.0.1:8080/deep/index.html','127.0.0.1:8080/deep/base.css']
 
 class MyWebServer(socketserver.BaseRequestHandler):
     
@@ -35,18 +37,37 @@ class MyWebServer(socketserver.BaseRequestHandler):
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\n" % self.data)
         inData = self.data.split()
+        print(inData)
+        req_url = inData[inData.index(b'Host:')+1]
         if inData[0] != b'GET':
+            fxn = '405 Sent!'
             self.send_405()
-            
-        #elif 
-        #self.request.sendall(bytearray("OK",'utf-8'))
+        elif req_url in redirect_lookups:
+            fxn = '301 Sent!'
+            self.send_301(req_url)
+        elif req_url in loc_lookups:
+            fxn = '200 Sent!'
+            self.send_200_loc(req_url)
+        elif req_url in file_lookups:
+            fxn = '200 Sent!'
+            self.send_200_file(req_url)
+        else:
+            fxn = '400 Sent!'
+            self.send_400()
+        print(fxn)
 
+    def send_400(self):
+        response = 'HTTP/1.1 400 Bad Request\r\nContent-type:text/html\r\nContent-length:0\r\nConnection: close\r\n\r\n'
+        self.request.sendall(bytearray(response,'utf-8'))
+        
     def send_405(self):
         response = 'HTTP/1.1 405 Method Not Allowed\r\nContent-type:text/html\r\nContent-length:0\r\nConnection: close\r\n\r\n'
         self.request.sendall(bytearray(response,'utf-8'))
 
-    def send_301(self,new):
-        response = 'HTTP/1.1 301 Redirect\r\nContent-type:text/html\r\nContent-length:'+length+'\r\nConnection: close\r\n'+new+'\r\n\r\n'
+    def send_301(self,req):
+        new = req+b'/'
+        response = 'HTTP/1.1 301 Moved Permanently\r\nLocation:'+str(new)+'\r\nContent-type:text/html\r\nContent-length:0\r\n\r\n'
+        self.request.sendall(bytearray(response,'utf-8'))
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080
