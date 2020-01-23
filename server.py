@@ -26,13 +26,27 @@ import socketserver
 
 # try: curl -v -X GET http://127.0.0.1:8080/
 
+#valid_host = []
+#redirect_host = []
 
 class MyWebServer(socketserver.BaseRequestHandler):
     
     def handle(self):
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\n" % self.data)
-        self.request.sendall(bytearray("OK",'utf-8'))
+        inData = self.data.split()
+        if inData[0] != b'GET':
+            self.send_405()
+            
+        #elif 
+        #self.request.sendall(bytearray("OK",'utf-8'))
+
+    def send_405(self):
+        response = 'HTTP/1.1 405 Method Not Allowed\r\nContent-type:text/html\r\nContent-length:0\r\nConnection: close\r\n\r\n'
+        self.request.sendall(bytearray(response,'utf-8'))
+
+    def send_301(self,new):
+        response = 'HTTP/1.1 301 Redirect\r\nContent-type:text/html\r\nContent-length:'+length+'\r\nConnection: close\r\n'+new+'\r\n\r\n'
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080
