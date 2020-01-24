@@ -50,6 +50,8 @@ class MyWebServer(socketserver.BaseRequestHandler):
         #print ("Got a request of: %s\n" % self.data)
         inData = self.data.split()
         #print(inData)
+        if (len(inData) < 2):
+            return
         req = inData[1]
         req = str(req.decode('UTF-8'))
         req_url = 'www'+ req
