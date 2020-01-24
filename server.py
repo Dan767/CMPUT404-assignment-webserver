@@ -1,7 +1,7 @@
 #  coding: utf-8 
 import socketserver
 import os
-# Copyright 2013 Abram Hindle, Eddie Antonio Santos
+# Copyright 2020 Daniel Dick
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,6 +15,15 @@ import os
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# This is derived from the code that is Copyright 2013 Abram Hindle, 
+# Eddie Antonio Santos.  This code can be found here:
+# 
+# http://github.com/abramhindle/CMPUT404-assignment-webserver
+#
+# Basis for list_dir function derived from answers on stackoverflow
+# (modified to suit the scenario). Credit to user badcOre.
+#
+# https://stackoverflow.com/questions/18510733/python-mapping-all-files-inside-a-folder
 #
 # Furthermore it is derived from the Python documentation examples thus
 # some of the code is Copyright © 2001-2013 Python Software
@@ -22,7 +31,7 @@ import os
 #
 # http://docs.python.org/2/library/socketserver.html
 #
-# run: python freetests.py
+# run: python3 freetests.py
 
 # try: curl -v -X GET http://127.0.0.1:8080/
 
