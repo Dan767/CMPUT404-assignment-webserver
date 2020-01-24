@@ -53,24 +53,24 @@ class MyWebServer(socketserver.BaseRequestHandler):
         req = inData[1]
         req = str(req.decode('UTF-8'))
         req_url = 'www'+ req
-        print("req url = "+str(req_url))
+        #print("req url = "+str(req_url))
         if inData[0] != b'GET':
-            fxn = '405 Sent!'
+            print("405 Sent!")
             self.send_405()
         elif (req_url+'/') in dirs or 'HTTP' in str(inData[1]) or '/' not in str(inData[1]):
-            fxn = '301 Sent!'
+            print("301 Sent!")
             self.send_301(req_url)
         elif req_url in dirs and req_url[-1] == '/':
-            fxn = '200 Sent -> location!'
+            print("200 Sent!")
             self.send_200_loc(req_url,dirs)
         elif req_url in dirs:
-            fxn = '200 Sent -> file!'
+            print("200 Sent!")
             self.send_200_file(req_url,dirs)
         else:
-            fxn = '404 Sent!'
+            print("404 Sent!")
             self.send_404()
-        print(fxn)
-        print('*******************************************')
+        #print(fxn)
+        #print('*******************************************')
 
     def send_200_loc(self,req,dirs):
         length = 0
@@ -79,7 +79,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
         reqs = [x for x in reqs if (x.count('/')==req.count('/') or (x.count('/')==(req.count('/')+1) and x[-1] == '/'))]
         reqs_link = [x[3:] for x in reqs if x != req and x[0] != '.']
         reqs_show = [x[len(req)-1:] for x in reqs if x != req and x[0] != '.']
-        print(reqs)
+        #print(reqs)
         payload = '''
 <!DOCTYPE html>
 <html>
