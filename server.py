@@ -66,19 +66,19 @@ class MyWebServer(socketserver.BaseRequestHandler):
         req_url = 'www'+ req
         #print("req url = "+str(req_url))
         if inData[0] != b'GET':
-            print("405 Sent!")
+            #print("405 Sent!")
             self.send_405()
         elif (req_url+'/') in dirs or 'HTTP' in str(inData[1]) or '/' not in str(inData[1]):
-            print("301 Sent!")
+            #print("301 Sent!")
             self.send_301(req_url)
         elif req_url in dirs and req_url[-1] == '/':
-            print("200 Sent!")
+            #print("200 Sent!")
             self.send_200_loc(req_url,dirs)
         elif req_url in dirs:
-            print("200 Sent!")
+            #print("200 Sent!")
             self.send_200_file(req_url,dirs)
         else:
-            print("404 Sent!")
+            #print("404 Sent!")
             self.send_404()
         #print(fxn)
         #print('*******************************************')
